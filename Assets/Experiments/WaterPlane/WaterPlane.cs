@@ -49,14 +49,11 @@ public class CopyColorPass : ScriptableRenderPass {
     }
 
     public override void Execute (ScriptableRenderContext context, ref RenderingData renderingData) {
-        // var source = BuiltinRenderTextureType.CurrentActive;
-        var source = Shader.PropertyToID ("_CameraTargetTexture");
+        var source = Shader.PropertyToID ("_CameraColorTexture");
 
         var cmd = CommandBufferPool.Get (profilerTag);
         using (new ProfilingScope (cmd, profilingSampler)) {
-            // Blit (cmd, source, destination);
-            cmd.Blit (source, destination);
-
+            Blit (cmd, source, destination);
             cmd.SetGlobalTexture ("_UnderWaterPlaneColor", destination);
         }
         context.ExecuteCommandBuffer (cmd);
